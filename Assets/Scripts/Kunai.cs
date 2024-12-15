@@ -49,10 +49,9 @@ public class Kunai : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            Vector2 impactPoint = other.GetContact(0).point;
             if (enemy)
             {
-                enemy.ApplyImpactForce(impactPoint, 100f);
+                enemy.EnableRagDoll();
             }
         }
     }

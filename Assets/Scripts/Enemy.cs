@@ -110,20 +110,10 @@ public class Enemy : MonoBehaviour
         transform.localScale = localScale;
     }
 
-    public void ApplyImpactForce(Vector2 impactPoint, float force)
-    {
-        isDead = true;
-        // Calculate the direction of the force
-        Vector2 direction = (transform.position - (Vector3)impactPoint).normalized;
-
-        // Apply the force to the Rigidbody2D
-        rigidBody.AddForce(direction * force, ForceMode2D.Impulse);
-
-        EnableRagDoll();
-    }
-
     public void EnableRagDoll()
     {
+        isDead = true;
+
         // Disable Animator
         animator.enabled = false;
 
@@ -139,6 +129,7 @@ public class Enemy : MonoBehaviour
         }
 
         GetComponent<Collider2D>().enabled = false;
+        rigidBody.linearVelocity = Vector2.zero;
 
         // Destroy after 5 seconds
         Destroy(gameObject, 5f);
