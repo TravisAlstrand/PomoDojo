@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private float timeInAir, coyoteTimer, attackTimer;
     private IEnumerator wallJumpRoutine;
 
-    public bool isGrounded, isOnWall;
+    [HideInInspector] public bool isGrounded, isOnWall;
 
     private Rigidbody2D rigidBody;
     private PlayerInput playerInput;
@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
             Move();
         }
         ApplyExtraGravity();
-        // HandleWallSlide();
     }
 
     private void GatherInput()
@@ -249,16 +248,6 @@ public class PlayerController : MonoBehaviour
         attackTimer = timeToAttackAgain;
     }
     #endregion
-
-    // private void HandleWallSlide()
-    // {
-    //     if (!isOnWall) { return; };
-
-    //     if (frameInput.Move.x != 0f)
-    //     {
-    //         rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, Mathf.Clamp(rigidBody.linearVelocityY, -wallSlideSpeed, float.MaxValue));
-    //     }
-    // }
 
     private void FlipSprite()
     {
