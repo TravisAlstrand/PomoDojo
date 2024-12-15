@@ -6,9 +6,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform patrolPointB;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float idleTime = 3f;
+    [SerializeField] private Rigidbody2D[] boneRigidBodies;
+    [SerializeField] private Collider2D[] boneColliders;
 
     private Vector3 currentPatrolTarget;
-    private bool isIdling = false;
+    private bool isIdling, isDead;
     private float idleTimer;
 
     private Rigidbody2D rigidBody;
@@ -23,20 +25,25 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         currentPatrolTarget = patrolPointA.position;
+        // Initialize bones in a non-ragDoll state
+        DisableRagDoll();
     }
 
     private void Update()
     {
-        if (isIdling)
+        if (!isDead)
         {
-            IdleBehavior();
-        }
-        else
-        {
-            PatrolBehavior();
-        }
+            if (isIdling)
+            {
+                IdleBehavior();
+            }
+            else
+            {
+                PatrolBehavior();
+            }
 
-        FlipSprite();
+            FlipSprite();
+        }
     }
 
     private void PatrolBehavior()
@@ -101,6 +108,57 @@ public class Enemy : MonoBehaviour
             localScale.x = 1f;
         }
         transform.localScale = localScale;
+    }
+
+    public void ApplyImpactForce(Vector2 impactPoint, float force)
+    {
+        isDead = true;
+        // Calculate the direction of the force
+        Vector2 direction = (transform.position - (Vector3)impactPoint).normalized;
+
+        // Apply the force to the Rigidbody2D
+        rigidBody.AddForce(direction * force, ForceMode2D.Impulse);
+
+        EnableRagDoll();
+    }
+
+    public void EnableRagDoll()
+    {
+        // Disable Animator
+        animator.enabled = false;
+
+        // Enable Rigidbody2D and Collider2D on each bone
+        foreach (var rb in boneRigidBodies)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+
+        foreach (var collider in boneColliders)
+        {
+            collider.enabled = true;
+        }
+
+        GetComponent<Collider2D>().enabled = false;
+
+        // Destroy after 5 seconds
+        Destroy(gameObject, 5f);
+    }
+
+    private void DisableRagDoll()
+    {
+        // Enable Animator
+        animator.enabled = true;
+
+        // Disable Rigidbody2D and Collider2D on each bone
+        foreach (var rb in boneRigidBodies)
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+
+        foreach (var collider in boneColliders)
+        {
+            collider.enabled = false;
+        }
     }
 
     private void OnDrawGizmos()

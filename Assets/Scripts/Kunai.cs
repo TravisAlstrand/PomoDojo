@@ -43,4 +43,18 @@ public class Kunai : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        rigidBody.linearVelocityX = 0f;
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Enemy enemy = other.gameObject.GetComponent<Enemy>();
+            Vector2 impactPoint = other.GetContact(0).point;
+            if (enemy)
+            {
+                enemy.ApplyImpactForce(impactPoint, 100f);
+            }
+        }
+    }
+
 }
