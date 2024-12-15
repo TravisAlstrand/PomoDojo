@@ -413,6 +413,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  wallJumpTime: 0.4
   wallCheckPos: {fileID: 1861454538}
   wallCheckSize: {x: 0.2, y: 0.6}
   wallSlideSpeed: 3

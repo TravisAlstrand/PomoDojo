@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector2 groundCheckSize;
     [SerializeField] private LayerMask groundLayer;
     [Header("Walls")]
+    [SerializeField] private float wallJumpTime = .4f;
     [SerializeField] private Transform wallCheckPos;
     [SerializeField] private Vector2 wallCheckSize;
     [SerializeField] private float wallSlideSpeed = 3f;
@@ -24,8 +26,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform wallKunaiSpawnPoint;
     [SerializeField] private float timeToAttackAgain = .5f;
 
-    private bool stoppedJumpEarly, isAttacking, canAttack = true;
+    private bool stoppedJumpEarly, isAttacking, canAttack = true, isWallJumping;
     private float timeInAir, coyoteTimer, attackTimer;
+    private IEnumerator wallJumpRoutine;
 
     public bool isGrounded, isOnWall;
 
@@ -51,12 +54,18 @@ public class PlayerController : MonoBehaviour
         HandleAttack();
         DidStopJumpEarly();
         GravityDelay();
-        FlipSprite();
+        if (!isWallJumping)
+        {
+            FlipSprite();
+        }
     }
 
     private void FixedUpdate()
     {
-        Move();
+        if (!isWallJumping)
+        {
+            Move();
+        }
         ApplyExtraGravity();
         // HandleWallSlide();
     }
@@ -120,17 +129,51 @@ public class PlayerController : MonoBehaviour
         {
             ApplyJumpForce();
         }
+        else if (!isGrounded && isOnWall)
+        {
+            ApplyWallJumpForce();
+        }
     }
 
     private void ApplyJumpForce()
     {
-        if (!frameInput.Jump) return;
-
         rigidBody.linearVelocity = Vector2.zero;
         timeInAir = 0f;
         coyoteTimer = 0f;
         stoppedJumpEarly = false;
         rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    private void ApplyWallJumpForce()
+    {
+        rigidBody.linearVelocity = Vector2.zero;
+        timeInAir = 0f;
+        coyoteTimer = 0f;
+        stoppedJumpEarly = false;
+        rigidBody.AddForce(new Vector2(-transform.localScale.x * jumpForce, jumpForce), ForceMode2D.Impulse);
+        if (wallJumpRoutine != null)
+        {
+            StopCoroutine(wallJumpRoutine);
+        }
+        wallJumpRoutine = WallJumpTimeRoutine();
+        StartCoroutine(wallJumpRoutine);
+    }
+
+    private IEnumerator WallJumpTimeRoutine()
+    {
+        isWallJumping = true;
+        // flip sprite manually
+        if (transform.localScale.x == 1)
+        {
+            transform.localScale = new(-1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new(1, 1, 1);
+        }
+        yield return new WaitForSeconds(wallJumpTime);
+        wallJumpRoutine = null;
+        isWallJumping = false;
     }
 
     private void CoyoteTimer()
