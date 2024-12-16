@@ -2,35 +2,19 @@ using UnityEngine;
 
 public class Kunai : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 30f;
-    [SerializeField] private float timeUntilDestroy = 2f;
-
+    private string kunaiThrower;
+    private readonly float timeUntilDestroy = 2f;
     private float destroyTimer;
 
     private Rigidbody2D rigidBody;
-    private PlayerController player;
 
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        player = FindFirstObjectByType<PlayerController>();
     }
 
     private void Start()
     {
-        Vector3 localScale = transform.localScale;
-        float direction;
-        if (!player.isGrounded && player.isOnWall)
-        {
-            direction = -player.transform.localScale.x;
-        }
-        else
-        {
-            direction = player.transform.localScale.x;
-        }
-        localScale.x = direction;
-        transform.localScale = localScale;
-        rigidBody.linearVelocityX = moveSpeed * direction;
         destroyTimer = timeUntilDestroy;
     }
 
@@ -43,10 +27,19 @@ public class Kunai : MonoBehaviour
         }
     }
 
+    public void Launch(string thrower, float direction, float speed)
+    {
+        kunaiThrower = thrower;
+        Vector3 localScale = transform.localScale;
+        localScale.x = direction;
+        transform.localScale = localScale;
+        rigidBody.linearVelocityX = speed * direction;
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         rigidBody.linearVelocityX = 0f;
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy") && kunaiThrower == "Player")
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
             if (enemy)
@@ -54,6 +47,7 @@ public class Kunai : MonoBehaviour
                 enemy.EnableRagDoll();
             }
         }
+        rigidBody.gravityScale = 1f;
     }
 
 }

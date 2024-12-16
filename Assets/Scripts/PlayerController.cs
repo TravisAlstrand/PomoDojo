@@ -18,11 +18,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wallJumpTime = .4f;
     [SerializeField] private Transform wallCheckPos;
     [SerializeField] private Vector2 wallCheckSize;
-    [SerializeField] private float wallSlideSpeed = 3f;
     [SerializeField] private LayerMask wallLayer;
     [Header("Attack")]
     [SerializeField] private GameObject kunaiPrefab;
     [SerializeField] private Transform kunaiSpawnPoint;
+    [SerializeField] private float kunaiSpeed = 75f;
     [SerializeField] private Transform wallKunaiSpawnPoint;
     [SerializeField] private float timeToAttackAgain = .5f;
 
@@ -236,12 +236,16 @@ public class PlayerController : MonoBehaviour
         if (isOnWall && !isGrounded)
         {
             animator.SetTrigger("isWallAttacking");
-            Instantiate(kunaiPrefab, wallKunaiSpawnPoint.position, Quaternion.identity);
+            GameObject kunaiObject = Instantiate(kunaiPrefab, wallKunaiSpawnPoint.position, Quaternion.identity);
+            Kunai kunai = kunaiObject.GetComponent<Kunai>();
+            kunai.Launch("Player", -transform.localScale.x, kunaiSpeed);
         }
         else
         {
             animator.SetTrigger("isAttacking");
-            Instantiate(kunaiPrefab, kunaiSpawnPoint.position, Quaternion.identity);
+            GameObject kunaiObject = Instantiate(kunaiPrefab, kunaiSpawnPoint.position, Quaternion.identity);
+            Kunai kunai = kunaiObject.GetComponent<Kunai>();
+            kunai.Launch("Player", transform.localScale.x, kunaiSpeed);
         }
         canAttack = false;
         isAttacking = true;

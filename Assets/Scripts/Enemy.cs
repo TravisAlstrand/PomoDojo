@@ -1,20 +1,37 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Moving")]
     [SerializeField] private Transform patrolPointA;
     [SerializeField] private Transform patrolPointB;
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float idleTime = 3f;
+    [Header("Player Detection")]
+    [SerializeField] private GameObject exclamationIcon;
+    [SerializeField] private Transform detectionOrigin;
+    [SerializeField] private Vector2 detectionBoxSize = new Vector2(20f, 2f);
+    [SerializeField] private LayerMask detectionLayer;
+    [Header("Attack")]
+    [SerializeField] private GameObject kunaiPrefab;
+    [SerializeField] private Transform kunaiSpawnPoint;
+    [SerializeField] private float kunaiSpeed = 20f;
+    [SerializeField] private float attackAgainTime = 1f;
+    [Header("RagDoll")]
     [SerializeField] private Rigidbody2D[] boneRigidBodies;
     [SerializeField] private Collider2D[] boneColliders;
 
     private Vector3 currentPatrolTarget;
-    private bool isIdling, isDead;
-    private float idleTimer;
+    private float idleTimer, attackTimer;
+    private bool canAttack = true;
+    private enum EnemyState { Patrolling, Idling, Attacking, Dead }
+    private EnemyState currentState;
+    private bool detectsPlayer;
 
     private Rigidbody2D rigidBody;
     private Animator animator;
+    private Vector3 playerPosition;
 
     private void Awake()
     {
@@ -25,85 +42,146 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         currentPatrolTarget = patrolPointA.position;
-        // Initialize bones in a non-ragDoll state
         DisableRagDoll();
     }
 
     private void Update()
     {
-        if (!isDead)
+        if (currentState != EnemyState.Dead)
         {
-            if (isIdling)
+            DetectPlayer();
+            if (detectsPlayer)
             {
-                IdleBehavior();
+                exclamationIcon.SetActive(true);
             }
             else
             {
-                PatrolBehavior();
+                exclamationIcon.SetActive(false);
+            }
+
+            switch (currentState)
+            {
+                case EnemyState.Patrolling:
+                    PatrolBehavior();
+                    break;
+                case EnemyState.Idling:
+                    IdleBehavior();
+                    break;
+                case EnemyState.Attacking:
+                    AttackBehavior();
+                    break;
             }
 
             FlipSprite();
+        }
+        else
+        {
+            exclamationIcon.SetActive(false);
+        }
+    }
+
+    private void DetectPlayer()
+    {
+        playerPosition = FindFirstObjectByType<PlayerController>().transform.position;
+        Collider2D hit = Physics2D.OverlapBox(detectionOrigin.position, detectionBoxSize, 0f, detectionLayer);
+
+        if (hit != null && hit.CompareTag("Player"))
+        {
+            detectsPlayer = true;
+            currentState = EnemyState.Attacking;
+        }
+        else
+        {
+            detectsPlayer = false;
         }
     }
 
     private void PatrolBehavior()
     {
-        // Move towards the current patrol target
         Vector2 direction = (currentPatrolTarget - transform.position).normalized;
         rigidBody.linearVelocity = direction * moveSpeed;
 
         animator.Play("Running");
         animator.Play("ArmRunning");
 
-        // Check if the enemy has reached the patrol target
         if (Vector2.Distance(transform.position, currentPatrolTarget) < 0.1f)
         {
-            rigidBody.linearVelocity = Vector2.zero; // Stop moving
-            StartIdling(); // Start idling
+            rigidBody.linearVelocity = Vector2.zero;
+            currentState = EnemyState.Idling;
+            StartIdling();
         }
     }
 
     private void IdleBehavior()
     {
-        // Count down the idle timer
         idleTimer -= Time.deltaTime;
 
         if (idleTimer <= 0)
         {
-            EndIdling(); // Stop idling and switch patrol target
+            EndIdling();
         }
+    }
+
+    private void AttackBehavior()
+    {
+        if (!detectsPlayer)
+        {
+            currentState = EnemyState.Idling;
+            StartIdling();
+        }
+
+        rigidBody.linearVelocity = Vector2.zero;
+        animator.Play("Idle");
+        if (canAttack)
+        {
+            animator.Play("Attack");
+            ThrowKunai();
+            attackTimer = attackAgainTime;
+            canAttack = false;
+        }
+        else
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0f)
+            {
+                canAttack = true;
+            }
+        }
+    }
+
+    private void ThrowKunai()
+    {
+        // Calculate the direction to the player
+        Vector2 direction = (new Vector2(playerPosition.x, playerPosition.y) - (Vector2)transform.position).normalized;
+        // Ensure direction.x is either 1 or -1
+        float horizontalDirection = Mathf.Sign(direction.x);
+        Debug.Log(horizontalDirection);
+        GameObject kunaiObject = Instantiate(kunaiPrefab, kunaiSpawnPoint.position, Quaternion.identity);
+        Kunai kunai = kunaiObject.GetComponent<Kunai>();
+        kunai.Launch("Enemy", horizontalDirection, kunaiSpeed);
     }
 
     private void StartIdling()
     {
         animator.Play("Idle");
         animator.Play("ArmIdle");
-        isIdling = true;
         idleTimer = idleTime;
     }
 
     private void EndIdling()
     {
-        isIdling = false;
-        // Switch to the next patrol point
-        if (currentPatrolTarget == patrolPointA.position)
-        {
-            currentPatrolTarget = patrolPointB.position;
-        }
-        else
-        {
-            currentPatrolTarget = patrolPointA.position;
-        }
+        currentState = EnemyState.Patrolling;
+        currentPatrolTarget = currentPatrolTarget == patrolPointA.position ? patrolPointB.position : patrolPointA.position;
     }
 
     private void FlipSprite()
     {
         Vector3 localScale = transform.localScale;
-        if (rigidBody.linearVelocityX < 0)
+        if (rigidBody.linearVelocity.x < 0)
         {
             localScale.x = -1f;
         }
-        else if (rigidBody.linearVelocityX > 0)
+        else if (rigidBody.linearVelocity.x > 0)
         {
             localScale.x = 1f;
         }
@@ -112,12 +190,9 @@ public class Enemy : MonoBehaviour
 
     public void EnableRagDoll()
     {
-        isDead = true;
-
-        // Disable Animator
+        currentState = EnemyState.Dead;
         animator.enabled = false;
 
-        // Enable Rigidbody2D and Collider2D on each bone
         foreach (var rb in boneRigidBodies)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
@@ -131,16 +206,13 @@ public class Enemy : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         rigidBody.linearVelocity = Vector2.zero;
 
-        // Destroy after 5 seconds
         Destroy(gameObject, 5f);
     }
 
     private void DisableRagDoll()
     {
-        // Enable Animator
         animator.enabled = true;
 
-        // Disable Rigidbody2D and Collider2D on each bone
         foreach (var rb in boneRigidBodies)
         {
             rb.bodyType = RigidbodyType2D.Static;
@@ -154,7 +226,9 @@ public class Enemy : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // Draw gizmos to visualize patrol points
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(detectionOrigin.position, detectionBoxSize);
+
         if (patrolPointA != null && patrolPointB != null)
         {
             Gizmos.color = Color.cyan;
