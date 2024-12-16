@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -17,10 +16,16 @@ public class DialogueManager : MonoBehaviour
     private int currentLineIndex = 0;
 
     private PlayerInput playerInput;
+    private FadeController fadeController;
+
+    private void Awake()
+    {
+        playerInput = FindFirstObjectByType<PlayerInput>();
+        fadeController = FindFirstObjectByType<FadeController>();
+    }
 
     private void Start()
     {
-        playerInput = FindFirstObjectByType<PlayerInput>();
         playerInput.SwitchToUIMap();
         StartCoroutine(WaitToStartDialogue());
     }
@@ -92,6 +97,6 @@ public class DialogueManager : MonoBehaviour
     {
         yield return new WaitForSeconds(timeToWait);
         playerInput.SwitchToGameplayMap();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        fadeController.FadeImageIn();
     }
 }
