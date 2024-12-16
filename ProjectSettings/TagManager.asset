@@ -16,7 +16,7 @@ TagManager:
   - Ground
   - Wall
   - Enemy
-  - 
+  - Kunai
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Hide Objects
+    uniqueID: 159133891
     locked: 0
   m_RenderingLayers:
   - Default

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 965350798727241085}
   - component: {fileID: 989630797011126910}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 462897149449011599}
   - component: {fileID: 671904425357706577}
   - component: {fileID: 3940409829789017599}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Kunai
   m_TagString: Kunai
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5192601929158963410}
   - component: {fileID: 3386080026986229264}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Blade
   m_TagString: Untagged
   m_Icon: {fileID: 0}

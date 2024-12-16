@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float idleTime = 3f;
     [Header("Player Detection")]
     [SerializeField] private GameObject exclamationIcon;
+    [SerializeField] private float waitForFirstAttack = .5f;
     [SerializeField] private Transform detectionOrigin;
     [SerializeField] private Vector2 detectionBoxSize = new Vector2(20f, 2f);
     [SerializeField] private LayerMask detectionLayer;
@@ -25,7 +26,7 @@ public class Enemy : MonoBehaviour
     private Vector3 currentPatrolTarget;
     private float idleTimer, attackTimer;
     private bool canAttack = true;
-    private enum EnemyState { Patrolling, Idling, Attacking, Dead }
+    private enum EnemyState { Patrolling, Idling, Detecting, Attacking, Dead }
     private EnemyState currentState;
     private bool detectsPlayer;
 
@@ -67,6 +68,9 @@ public class Enemy : MonoBehaviour
                 case EnemyState.Idling:
                     IdleBehavior();
                     break;
+                case EnemyState.Detecting:
+                    // Detecting behavior is handled by the coroutine
+                    break;
                 case EnemyState.Attacking:
                     AttackBehavior();
                     break;
@@ -87,12 +91,33 @@ public class Enemy : MonoBehaviour
 
         if (hit != null && hit.CompareTag("Player"))
         {
-            detectsPlayer = true;
-            currentState = EnemyState.Attacking;
+            if (!detectsPlayer)
+            {
+                detectsPlayer = true;
+                StartCoroutine(HandleDetection());
+            }
         }
         else
         {
             detectsPlayer = false;
+            if (currentState == EnemyState.Detecting)
+            {
+                StopCoroutine(HandleDetection());
+                currentState = EnemyState.Patrolling; // Return to patrolling if the player escapes
+            }
+        }
+    }
+
+    private IEnumerator HandleDetection()
+    {
+        currentState = EnemyState.Detecting;
+
+        // Delay before attacking
+        yield return new WaitForSeconds(waitForFirstAttack);
+
+        if (detectsPlayer)
+        {
+            currentState = EnemyState.Attacking;
         }
     }
 
@@ -155,7 +180,6 @@ public class Enemy : MonoBehaviour
         Vector2 direction = (new Vector2(playerPosition.x, playerPosition.y) - (Vector2)transform.position).normalized;
         // Ensure direction.x is either 1 or -1
         float horizontalDirection = Mathf.Sign(direction.x);
-        Debug.Log(horizontalDirection);
         GameObject kunaiObject = Instantiate(kunaiPrefab, kunaiSpawnPoint.position, Quaternion.identity);
         Kunai kunai = kunaiObject.GetComponent<Kunai>();
         kunai.Launch("Enemy", horizontalDirection, kunaiSpeed);

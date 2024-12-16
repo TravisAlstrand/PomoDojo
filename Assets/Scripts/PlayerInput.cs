@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,7 @@ public class PlayerInput : MonoBehaviour
     private InputAction move;
     private InputAction jump;
     private InputAction attack;
+    private InputAction submit;
 
     private void Awake()
     {
@@ -16,6 +18,7 @@ public class PlayerInput : MonoBehaviour
         move = inputActions.Player.Move;
         jump = inputActions.Player.Jump;
         attack = inputActions.Player.Attack;
+        submit = inputActions.UI.Submit;
     }
 
     private void OnEnable()
@@ -41,8 +44,21 @@ public class PlayerInput : MonoBehaviour
             Move = move.ReadValue<Vector2>(),
             Jump = jump.WasPressedThisFrame(),
             JumpRelease = jump.WasReleasedThisFrame(),
-            Attack = attack.WasPressedThisFrame()
+            Attack = attack.WasPressedThisFrame(),
+            SubmitRelease = submit.WasReleasedThisFrame()
         };
+    }
+
+    public void SwitchToUIMap()
+    {
+        inputActions.Player.Disable();
+        inputActions.UI.Enable();
+    }
+
+    public void SwitchToGameplayMap()
+    {
+        inputActions.UI.Disable();
+        inputActions.Player.Enable();
     }
 }
 
@@ -52,4 +68,5 @@ public struct FrameInput
     public bool Jump;
     public bool JumpRelease;
     public bool Attack;
+    public bool SubmitRelease;
 }
