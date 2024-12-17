@@ -43,8 +43,23 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Hide Objects
-    uniqueID: 159133891
+  - name: Background 2
+    uniqueID: 708733231
+    locked: 0
+  - name: Background 1
+    uniqueID: 862103625
+    locked: 0
+  - name: Ground
+    uniqueID: 1409895965
+    locked: 0
+  - name: NPCs
+    uniqueID: 473995051
+    locked: 0
+  - name: Player
+    uniqueID: 836892317
+    locked: 0
+  - name: InFrontOfPlayer
+    uniqueID: 413652941
     locked: 0
   m_RenderingLayers:
   - Default

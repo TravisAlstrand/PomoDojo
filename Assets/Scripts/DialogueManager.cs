@@ -12,16 +12,20 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Image senseiArrow;
     [SerializeField] private Image playerArrow;
     [SerializeField] private float timeToWait = 2f;
+    [SerializeField] private bool changeSceneAfter = true;
+    [SerializeField] private bool startTimerAfter = false;
 
     private int currentLineIndex = 0;
 
     private PlayerInput playerInput;
     private FadeController fadeController;
+    private Timer timer;
 
     private void Awake()
     {
         playerInput = FindFirstObjectByType<PlayerInput>();
         fadeController = FindFirstObjectByType<FadeController>();
+        timer = FindFirstObjectByType<Timer>();
     }
 
     private void Start()
@@ -46,7 +50,19 @@ public class DialogueManager : MonoBehaviour
                 nextLineHintText.gameObject.SetActive(false);
                 senseiArrow.gameObject.SetActive(false);
                 playerArrow.gameObject.SetActive(false);
-                StartCoroutine(WaitToStartNextScene());
+                if (changeSceneAfter)
+                {
+                    StartCoroutine(WaitToStartNextScene());
+                }
+                else if (startTimerAfter)
+                {
+                    playerInput.SwitchToGameplayMap();
+                    timer.StartTimer();
+                }
+                else
+                {
+                    playerInput.SwitchToGameplayMap();
+                }
             }
             else
             {
@@ -77,12 +93,16 @@ public class DialogueManager : MonoBehaviour
                 senseiArrow.gameObject.SetActive(true);
                 playerArrow.gameObject.SetActive(false);
             }
-            else
+            else if (line == "n-Player")
             {
                 senseiArrow.gameObject.SetActive(false);
                 playerArrow.gameObject.SetActive(true);
             }
-
+            else
+            {
+                senseiArrow.gameObject.SetActive(false);
+                playerArrow.gameObject.SetActive(false);
+            }
             currentLineIndex++;
         }
     }
