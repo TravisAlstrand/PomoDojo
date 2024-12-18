@@ -1216,7 +1216,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -5686210485128743891, guid: e59be6068cb564b7bb594d505d8a82ce, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.58431375, g: 0.58431375, b: 0.58431375, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1559,6 +1559,11 @@ PrefabInstance:
       propertyPath: nextLineHintText
       value: 
       objectReference: {fileID: 506380738}
+    - target: {fileID: 1504923991265768469, guid: 49e40e9b9f2fd40e3ae77f8a88098c62, type: 3}
+      propertyPath: 'dialogueLines.Array.data[5]'
+      value: Here at PomoDojo we train for 1 minute then break for 15 seconds and
+        repeat.
+      objectReference: {fileID: 0}
     - target: {fileID: 5590067670133580350, guid: 49e40e9b9f2fd40e3ae77f8a88098c62, type: 3}
       propertyPath: m_Name
       value: Dialogue Manager
