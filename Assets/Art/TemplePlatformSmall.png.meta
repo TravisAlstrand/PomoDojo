@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f169cc0288e404b929ec4b142b2c68df
+guid: 406f1f0c2a48e424a80835614cc2ed5e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3369229481941771463
-    second: TemplePlatform_0
+      213: 7599513955696340671
+    second: TemplePlatformSmall_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,10 +72,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,12 +113,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TemplePlatform_0
+      name: TemplePlatformSmall_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 128
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7c4a9e5ec58e1ce20800000000000000
-      internalID: 3369229481941771463
+      spriteID: fbe67e2cda5e67960800000000000000
+      internalID: 7599513955696340671
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TemplePlatform_0: 3369229481941771463
+      TemplePlatformSmall_0: 7599513955696340671
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
