@@ -6,12 +6,12 @@ public class Timer : MonoBehaviour
     [SerializeField] private float startTime = 60f;
     [SerializeField] private TextMeshProUGUI timerText;
 
-    private bool timerStarted;
+    private bool timerActive;
     private float timer;
 
     private void Update()
     {
-        if (!timerStarted) { return; }
+        if (!timerActive) { return; }
 
         timer -= Time.deltaTime;
         UpdateTimer();
@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
         if (timer <= 0f)
         {
             timer = 0f;
-            timerStarted = false;
+            timerActive = false;
         }
     }
 
@@ -28,11 +28,27 @@ public class Timer : MonoBehaviour
         timer = startTime;
         UpdateTimer();
         timerText.gameObject.SetActive(true);
-        timerStarted = true;
+        timerActive = true;
+    }
+
+    public void PauseTimer()
+    {
+        timerActive = false;
+    }
+
+    public void UnPauseTimer()
+    {
+        timerActive = true;
     }
 
     private void UpdateTimer()
     {
         timerText.text = timer.ToString("F2");
+    }
+
+    public void RemoveTimer()
+    {
+        timerActive = false;
+        timerText.gameObject.SetActive(false);
     }
 }

@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private bool stoppedJumpEarly, isAttacking, canAttack = true, isWallJumping;
     private float timeInAir, coyoteTimer, attackTimer;
+    public bool hasTaco;
     private IEnumerator wallJumpRoutine;
 
     [HideInInspector] public bool isGrounded, isOnWall;
