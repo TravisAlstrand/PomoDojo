@@ -18,6 +18,7 @@ public class EndTacoTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Player") && player.hasTaco)
         {
             timer.PauseTimer();
+            timer.TimerTextGreen();
             taco.DisableTacoCanvasImage();
             Debug.Log("Taco Received!");
         }

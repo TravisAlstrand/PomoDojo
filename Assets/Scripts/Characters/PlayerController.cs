@@ -29,7 +29,9 @@ public class PlayerController : MonoBehaviour
     private bool stoppedJumpEarly, isAttacking, canAttack = true, isWallJumping;
     private float timeInAir, coyoteTimer, attackTimer;
     public bool hasTaco;
+    private bool canMove = true;
     private IEnumerator wallJumpRoutine;
+    private IEnumerator respawnRoutine;
 
     [HideInInspector] public bool isGrounded, isOnWall;
 
@@ -37,27 +39,35 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private Animator animator;
     private FrameInput frameInput;
+    private Timer timer;
 
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
+        timer = FindFirstObjectByType<Timer>();
     }
 
     private void Update()
     {
-        GatherInput();
-        CheckCurrentState();
-        CoyoteTimer();
-        HandleJump();
-        AttackTimer();
-        HandleAttack();
-        DidStopJumpEarly();
-        GravityDelay();
-        if (!isWallJumping)
-        {
-            FlipSprite();
+        if (canMove) {
+            GatherInput();
+            CheckCurrentState();
+            CoyoteTimer();
+            HandleJump();
+            AttackTimer();
+            HandleAttack();
+            DidStopJumpEarly();
+            GravityDelay();
+            if (!isWallJumping)
+            {
+                FlipSprite();
+            }
+        }
+        else {
+            animator.Play("Idle");
+            animator.Play("ArmIdle");
         }
     }
 
@@ -77,7 +87,9 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        rigidBody.linearVelocityX = frameInput.Move.x * moveSpeed;
+        if (canMove) {
+            rigidBody.linearVelocityX = frameInput.Move.x * moveSpeed;
+        }
     }
 
     private void CheckCurrentState()
@@ -118,6 +130,24 @@ public class PlayerController : MonoBehaviour
         {
             animator.Play("WallSliding");
         }
+    }
+
+    public void JustRespawned() {
+        rigidBody.linearVelocity = Vector2.zero;
+        canMove = false;
+        if (respawnRoutine != null)
+        {
+            StopCoroutine(respawnRoutine);
+        }
+        respawnRoutine = JustRespawnedCO();
+        StartCoroutine(respawnRoutine);
+    }
+
+    private IEnumerator JustRespawnedCO() {
+        yield return new WaitForSeconds(2f);
+        canMove = true;
+        timer.UnPauseTimer();
+        timer.TimerTextWhite();
     }
 
     #region Jump Methods

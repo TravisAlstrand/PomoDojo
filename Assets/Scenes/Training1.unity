@@ -12054,7 +12054,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 3
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c3b2bda0a689a415f985b79f27b72a03, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -13320,6 +13320,18 @@ PrefabInstance:
       propertyPath: tacoImage
       value: 
       objectReference: {fileID: 664550046}
+    - target: {fileID: 5102407163838486339, guid: 4da934ffeb92a474ba67f06f0b212233, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2925908689177850180, guid: 3fad8d22f25ec468fba6cd9bfb65b1cc, type: 3}
+    - target: {fileID: 5569163520068344110, guid: 4da934ffeb92a474ba67f06f0b212233, type: 3}
+      propertyPath: m_Radius
+      value: 1.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5569163520068344110, guid: 4da934ffeb92a474ba67f06f0b212233, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

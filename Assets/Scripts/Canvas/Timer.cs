@@ -40,11 +40,23 @@ public class Timer : MonoBehaviour
     {
         timerActive = true;
     }
-    
+
     public void RemoveTimer()
     {
         timerActive = false;
         timerText.gameObject.SetActive(false);
+    }
+
+    public void TimerTextGreen() {
+        timerText.color = Color.green;
+    }
+    
+    public void TimerTextRed() {
+        timerText.color = Color.red;
+    }
+
+    public void TimerTextWhite() {
+        timerText.color = Color.white;
     }
 
     private void UpdateTimer()
@@ -52,4 +64,7 @@ public class Timer : MonoBehaviour
         timerText.text = timer.ToString("F2");
     }
 
+    public float GetTimeTaken() {
+        return startTime - timer;
+    }
 }
