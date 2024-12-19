@@ -40,15 +40,16 @@ public class Timer : MonoBehaviour
     {
         timerActive = true;
     }
+    
+    public void RemoveTimer()
+    {
+        timerActive = false;
+        timerText.gameObject.SetActive(false);
+    }
 
     private void UpdateTimer()
     {
         timerText.text = timer.ToString("F2");
     }
 
-    public void RemoveTimer()
-    {
-        timerActive = false;
-        timerText.gameObject.SetActive(false);
-    }
 }

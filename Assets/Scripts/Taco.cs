@@ -14,4 +14,8 @@ public class Taco : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void DisableTacoCanvasImage() {
+        tacoImage.gameObject.SetActive(false);
+    }
 }
