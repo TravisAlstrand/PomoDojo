@@ -92,6 +92,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void DisableMovement() {
+        canMove = false;
+        rigidBody.linearVelocityX = 0f;
+    }
+
+    public void EnableMovement() {
+        canMove = true;
+    }
+
     private void CheckCurrentState()
     {
         Collider2D groundCheck = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0f, groundLayer);

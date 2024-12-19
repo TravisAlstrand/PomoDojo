@@ -1,13 +1,23 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class Timer : MonoBehaviour
 {
     [SerializeField] private float startTime = 60f;
     [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private Transform startRespawnPoint;
+    [SerializeField] private GameObject tryAgainText;
 
     private bool timerActive;
     private float timer;
+
+    private PlayerController player;
+
+    private void Awake() {
+        player = FindFirstObjectByType<PlayerController>();
+    }
 
     private void Update()
     {
@@ -19,7 +29,9 @@ public class Timer : MonoBehaviour
         if (timer <= 0f)
         {
             timer = 0f;
+            TimerTextRed();
             timerActive = false;
+            RestartTraining();
         }
     }
 
@@ -62,6 +74,23 @@ public class Timer : MonoBehaviour
     private void UpdateTimer()
     {
         timerText.text = timer.ToString("F2");
+    }
+
+    private void RestartTraining() {
+        player.DisableMovement();
+        player.transform.localScale = Vector2.one;
+        player.gameObject.transform.position = startRespawnPoint.position;
+        timer = startTime;
+        tryAgainText.SetActive(true);
+        StartCoroutine(WaitToRestart());
+    }
+
+    private IEnumerator WaitToRestart() {
+        yield return new WaitForSeconds(2f);
+        player.EnableMovement();
+        tryAgainText.SetActive(false);
+        TimerTextWhite();
+        timerActive = true;
     }
 
     public float GetTimeTaken() {
