@@ -12,7 +12,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Image senseiArrow;
     [SerializeField] private Image playerArrow;
     [SerializeField] private float timeToWait = 2f;
-    [SerializeField] private bool changeSceneAfter = true;
+    [SerializeField] private bool loadNextSceneAfter = true;
+    [SerializeField] private bool loadMainMenuAfter = false;
     [SerializeField] private bool startTimerAfter = false;
 
     private int currentLineIndex = 0;
@@ -50,9 +51,12 @@ public class DialogueManager : MonoBehaviour
                 nextLineHintText.gameObject.SetActive(false);
                 senseiArrow.gameObject.SetActive(false);
                 playerArrow.gameObject.SetActive(false);
-                if (changeSceneAfter)
+                if (loadNextSceneAfter)
                 {
                     StartCoroutine(WaitToStartNextScene());
+                }
+                else if (loadMainMenuAfter) {
+                    StartCoroutine(WaitToLoadMenu());
                 }
                 else if (startTimerAfter)
                 {
@@ -117,6 +121,11 @@ public class DialogueManager : MonoBehaviour
     {
         yield return new WaitForSeconds(timeToWait);
         playerInput.SwitchToGameplayMap();
-        fadeController.FadeImageIn();
+        fadeController.FadeImageIn("next");
+    }
+
+    private IEnumerator WaitToLoadMenu() {
+        yield return new WaitForSeconds(timeToWait);
+        fadeController.FadeImageIn("menu");
     }
 }

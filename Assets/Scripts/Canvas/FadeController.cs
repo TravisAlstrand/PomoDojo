@@ -1,16 +1,19 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class FadeController : MonoBehaviour
 {
     [SerializeField] private Image fadeImage;
+    private float timeToWait = 1.2f;
+
     private Animator animator;
+    private SceneController sceneController;
 
     private void Awake()
     {
         animator = fadeImage.GetComponent<Animator>();
+        sceneController = FindFirstObjectByType<SceneController>();
     }
 
     private void Start()
@@ -23,15 +26,21 @@ public class FadeController : MonoBehaviour
         animator.Play("FadeIn");
     }
 
-    public void FadeImageIn()
+    public void FadeImageIn(string sceneToLoad)
     {
         animator.Play("FadeOut");
-        StartCoroutine(WaitToLoadNextScene());
+        StartCoroutine(WaitToLoadNextScene(sceneToLoad));
     }
 
-    private IEnumerator WaitToLoadNextScene()
+    private IEnumerator WaitToLoadNextScene(string sceneToLoad)
     {
-        yield return new WaitForSeconds(1.2f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        yield return new WaitForSeconds(timeToWait);
+        if (sceneToLoad.ToLower() == "next") {
+            sceneController.LoadNextScene();
+        } else if (sceneToLoad.ToLower() == "menu") {
+            sceneController.LoadMainMenu();
+        } else if (sceneToLoad.ToLower() == "reload") {
+            sceneController.ReloadCurrentScene();
+        }
     }
 }

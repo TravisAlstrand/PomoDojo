@@ -166,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 26ac32064da7d410ebe59cdd4d24aa14, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.8323445
+      value: -3.47
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 26ac32064da7d410ebe59cdd4d24aa14, type: 3}
       propertyPath: m_LocalPosition.z
@@ -466,7 +466,7 @@ MonoBehaviour:
   gravityDelay: 0.2
   coyoteTime: 0.1
   groundCheckPos: {fileID: 640816148846625445}
-  groundCheckSize: {x: 0.5, y: 0.25}
+  groundCheckSize: {x: 0.26, y: 0.25}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -481,6 +481,7 @@ MonoBehaviour:
   kunaiSpeed: 75
   wallKunaiSpawnPoint: {fileID: 4364376324630507761}
   timeToAttackAgain: 0.25
+  hasTaco: 0
   isGrounded: 0
   isOnWall: 0
 --- !u!114 &7676926043453634113
