@@ -14,9 +14,11 @@ public class Timer : MonoBehaviour
     private float timer;
 
     private PlayerController player;
+    private Taco taco;
 
     private void Awake() {
         player = FindFirstObjectByType<PlayerController>();
+        taco = FindFirstObjectByType<Taco>();
     }
 
     private void Update()
@@ -79,6 +81,8 @@ public class Timer : MonoBehaviour
     private void RestartTraining() {
         player.DisableMovement();
         player.transform.localScale = Vector2.one;
+        player.hasTaco = false;
+        taco.ResetTaco();
         player.gameObject.transform.position = startRespawnPoint.position;
         timer = startTime;
         tryAgainText.SetActive(true);

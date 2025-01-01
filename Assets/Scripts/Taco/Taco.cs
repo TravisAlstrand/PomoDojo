@@ -6,6 +6,7 @@ public class Taco : MonoBehaviour
 {
     [SerializeField] private Image tacoImage;
     [SerializeField] private Transform respawnPoint;
+    [SerializeField] private Vector3 beginSpawnPoint;
     [SerializeField] private ParticleSystem tacoParticles;
 
     private Animator animator;
@@ -32,6 +33,12 @@ public class Taco : MonoBehaviour
         transform.position = respawnPoint.position;
         animator.Play("FinSpin");
         StartCoroutine(WaitToDestroy());
+    }
+
+    public void ResetTaco() {
+        transform.position = beginSpawnPoint;
+        tacoImage.gameObject.SetActive(false);
+        gameObject.SetActive(true);
     }
 
     private IEnumerator WaitToDestroy() {

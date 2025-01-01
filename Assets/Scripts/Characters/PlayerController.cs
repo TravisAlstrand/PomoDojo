@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 15f;
     [Header("Jumping")]
-    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float jumpForce = 17f;
     [SerializeField] private float extraGravity = 700f;
     [SerializeField] private float gravityDelay = .2f;
     [SerializeField] private float coyoteTime = .1f;
@@ -16,15 +17,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [Header("Walls")]
     [SerializeField] private float wallJumpTime = .4f;
+    [SerializeField] private float wallJumpXForce = 25f;
     [SerializeField] private Transform wallCheckPos;
     [SerializeField] private Vector2 wallCheckSize;
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private PhysicsMaterial2D slippyMaterial;
     [Header("Attack")]
     [SerializeField] private GameObject kunaiPrefab;
     [SerializeField] private Transform kunaiSpawnPoint;
     [SerializeField] private float kunaiSpeed = 75f;
     [SerializeField] private Transform wallKunaiSpawnPoint;
     [SerializeField] private float timeToAttackAgain = .5f;
+    [Header("Falling")]
+    [SerializeField] private float maxFallVelocity = -30f;
 
     private bool stoppedJumpEarly, isAttacking, canAttack = true, isWallJumping;
     private float timeInAir, coyoteTimer, attackTimer;
@@ -40,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private FrameInput frameInput;
     private Timer timer;
+    // private CinemachinePositionComposer camPosComposer;
 
     private void Awake()
     {
@@ -47,6 +53,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
         timer = FindFirstObjectByType<Timer>();
+        // camPosComposer = FindFirstObjectByType<CinemachinePositionComposer>();
     }
 
     private void Update()
@@ -108,6 +115,14 @@ public class PlayerController : MonoBehaviour
         isGrounded = groundCheck;
         isOnWall = wallCheck;
 
+        // if (!isGrounded && !isOnWall && rigidBody.linearVelocityY < 0f) {
+        //     camPosComposer.Lookahead.Time = 0.25f;
+        // }
+        // else {
+        //     camPosComposer.Lookahead.Time = 0.9f;
+        // }
+        
+
         if (isGrounded && rigidBody.linearVelocityY <= 0f)
         {
             if (frameInput.Move.x != 0f)
@@ -126,6 +141,7 @@ public class PlayerController : MonoBehaviour
                     animator.Play("ArmIdle");
                 }
             }
+            rigidBody.sharedMaterial = slippyMaterial;
         }
         else if (!isGrounded && !isOnWall)
         {
@@ -134,10 +150,12 @@ public class PlayerController : MonoBehaviour
             {
                 animator.Play("ArmIdle");
             }
+            rigidBody.sharedMaterial = slippyMaterial;
         }
         else if (!isGrounded && isOnWall)
         {
             animator.Play("WallSliding");
+            rigidBody.sharedMaterial = null;
         }
     }
 
@@ -252,6 +270,10 @@ public class PlayerController : MonoBehaviour
             if (timeInAir > gravityDelay || stoppedJumpEarly)
             {
                 rigidBody.AddForce(new Vector2(0f, -extraGravity * Time.deltaTime));
+                // max fall speed
+                if (rigidBody.linearVelocityY < maxFallVelocity) {
+                    rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, maxFallVelocity);
+                }
             }
         }
     }

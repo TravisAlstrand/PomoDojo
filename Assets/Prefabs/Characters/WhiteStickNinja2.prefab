@@ -437,7 +437,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 3
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 859e7491efc8e4985acb2755b7d795a7, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -476,11 +476,13 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
+  slippyMaterial: {fileID: 6200000, guid: 859e7491efc8e4985acb2755b7d795a7, type: 2}
   kunaiPrefab: {fileID: 4654623483690306177, guid: ef629376329be4ceaa17728f8030f1fd, type: 3}
   kunaiSpawnPoint: {fileID: 3776868854625672458}
   kunaiSpeed: 75
   wallKunaiSpawnPoint: {fileID: 4364376324630507761}
   timeToAttackAgain: 0.25
+  maxFallVelocity: -30
   hasTaco: 0
   isGrounded: 0
   isOnWall: 0
