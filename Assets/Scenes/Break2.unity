@@ -1043,7 +1043,10 @@ MonoBehaviour:
   nextLineHintText: {fileID: 789866428641279092}
   dialogueLines:
   - n-Sensei
-  - You did very well my hoppy apprentice!
+  - This place is nuts right? Could you imagine building it??
+  - I mean... platforms are just floating and I have NO IDEA how that last section
+    was staying up!
+  - Anyways, you did very well my wall hopping apprentice!
   - You have earned another break.
   senseiArrow: {fileID: 2980362317327453880}
   playerArrow: {fileID: 3433084469082533237}
