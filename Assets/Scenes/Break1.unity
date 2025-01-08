@@ -1622,7 +1622,7 @@ MonoBehaviour:
   nextLineHintText: {fileID: 506380738}
   dialogueLines:
   - n-Sensei
-  - You are very fast and very bouncy my friend. Well done!
+  - You are very fast my bouncy friend. Well done!
   - You have earned yourself a break!
   senseiArrow: {fileID: 590361083}
   playerArrow: {fileID: 1269159165}

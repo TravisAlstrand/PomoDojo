@@ -12,27 +12,13 @@ public class MenuManager : MonoBehaviour
     private float[] bestTimes = new float[3];
 
     private PlayerInput playerInput;
-    private DataPersister dataPersister;
 
     private void Awake() {
         playerInput = FindFirstObjectByType<PlayerInput>();
-        dataPersister = FindFirstObjectByType<DataPersister>();
     }
 
     private void Start() {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        // Deactivate all pointers initially
-        foreach (Image pointer in pointers)
-        {
-            pointer.gameObject.SetActive(false);
-        }
-
-        playerInput.SwitchToUIMap();
-        buttons[0].Select();
-        GetBestTimes();
-        SetBestTexts();
+        InitializeMenu();
     }
 
     private void Update() {
@@ -45,9 +31,22 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void InitializeMenu() {
+        // Deactivate all pointers initially
+        foreach (Image pointer in pointers)
+        {
+            pointer.gameObject.SetActive(false);
+        }
+
+        playerInput.SwitchToUIMap();
+        buttons[0].Select();
+        GetBestTimes();
+        SetBestTexts();
+    }
+
     private void GetBestTimes() {
         for (int i = 0; i < 3; i++) {
-            bestTimes[i] = dataPersister.GetTrainingBest(i+1);
+            bestTimes[i] = DataPersister.Instance.GetTrainingBest(i+1);
         }
     }
 

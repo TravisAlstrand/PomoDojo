@@ -11,7 +11,6 @@ public class EndTacoTrigger : MonoBehaviour
     private Timer timer;
     private Taco taco;
     private FadeController fadeController;
-    private DataPersister dataPersister;
     private SceneController sceneController;
 
     private void Awake()
@@ -20,7 +19,6 @@ public class EndTacoTrigger : MonoBehaviour
         timer = FindFirstObjectByType<Timer>();
         taco = FindFirstObjectByType<Taco>();
         fadeController = FindFirstObjectByType<FadeController>();
-        dataPersister = FindFirstObjectByType<DataPersister>();
         sceneController = FindFirstObjectByType<SceneController>();
     }
 
@@ -40,9 +38,9 @@ public class EndTacoTrigger : MonoBehaviour
             } else {
                 currentTrainingNumber = 3;
             }
-            currentBestTime = dataPersister.GetTrainingBest(currentTrainingNumber);
-            if (currentBestTime != 0 && timeTaken < currentBestTime) {
-                dataPersister.SetTrainingBest(currentTrainingNumber, timeTaken);
+            currentBestTime = DataPersister.Instance.GetTrainingBest(currentTrainingNumber);
+            if (currentBestTime == 0 || timeTaken < currentBestTime) {
+                DataPersister.Instance.SetTrainingBest(currentTrainingNumber, timeTaken);
             }
             taco.TacoFinisher();
             player.DisableMovement();
