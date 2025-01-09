@@ -381,6 +381,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: -8089108032486474258, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8089108032486474258, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 473995051
+      objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.54
@@ -420,6 +428,46 @@ PrefabInstance:
     - target: {fileID: -7552582706839291426, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1962005911292362125, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -1962005911292362125, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 473995051
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228240227554443156, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228240227554443156, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 473995051
+      objectReference: {fileID: 0}
+    - target: {fileID: 5359103177601667974, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5359103177601667974, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 473995051
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363044052467528197, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363044052467528197, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 473995051
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411418902762912641, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411418902762912641, guid: 1c8b6292ca740489bb786975c714b5b6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 473995051
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1243,6 +1291,7 @@ MonoBehaviour:
   moveSpeed: 10
   idleTime: 3
   exclamationIcon: {fileID: 941401002598900169}
+  waitForFirstAttack: 0.5
   detectionOrigin: {fileID: 1086601086874630131}
   detectionBoxSize: {x: 7, y: 2}
   detectionLayer:
