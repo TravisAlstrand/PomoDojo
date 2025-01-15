@@ -48,41 +48,35 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (currentState != EnemyState.Dead)
-        {
-            DetectPlayer();
-            if (detectsPlayer)
-            {
-                exclamationIcon.SetActive(true);
-            }
-            else
-            {
-                exclamationIcon.SetActive(false);
-            }
-
-            switch (currentState)
-            {
-                case EnemyState.Patrolling:
-                    PatrolBehavior();
-                    break;
-                case EnemyState.Idling:
-                    IdleBehavior();
-                    break;
-                case EnemyState.Detecting:
-                    // Detecting behavior is handled by the coroutine
-                    break;
-                case EnemyState.Attacking:
-                    AttackBehavior();
-                    break;
-            }
-
-            FlipSprite();
-        }
-        else
+        if (currentState == EnemyState.Dead)
         {
             exclamationIcon.SetActive(false);
+            return; // Stop further processing
         }
+
+        DetectPlayer();
+
+        exclamationIcon.SetActive(detectsPlayer);
+
+        switch (currentState)
+        {
+            case EnemyState.Patrolling:
+                PatrolBehavior();
+                break;
+            case EnemyState.Idling:
+                IdleBehavior();
+                break;
+            case EnemyState.Detecting:
+                // Detecting behavior is handled by the coroutine
+                break;
+            case EnemyState.Attacking:
+                AttackBehavior();
+                break;
+        }
+
+        FlipSprite();
     }
+
 
     private void DetectPlayer()
     {
@@ -149,6 +143,8 @@ public class Enemy : MonoBehaviour
 
     private void AttackBehavior()
     {
+        if (currentState == EnemyState.Dead) return;
+
         if (!detectsPlayer)
         {
             currentState = EnemyState.Idling;
@@ -176,6 +172,7 @@ public class Enemy : MonoBehaviour
 
     private void ThrowKunai()
     {
+        if (currentState == EnemyState.Dead) return;
         // Calculate the direction to the player
         Vector2 direction = (new Vector2(playerPosition.x, playerPosition.y) - (Vector2)transform.position).normalized;
         // Ensure direction.x is either 1 or -1
@@ -215,7 +212,9 @@ public class Enemy : MonoBehaviour
     public void EnableRagDoll()
     {
         currentState = EnemyState.Dead;
+        StopAllCoroutines();
         animator.enabled = false;
+        exclamationIcon.SetActive(false);
 
         foreach (var rb in boneRigidBodies)
         {
@@ -230,6 +229,7 @@ public class Enemy : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         rigidBody.linearVelocity = Vector2.zero;
 
+        enabled = false; // Disable the script
         Destroy(gameObject, 5f);
     }
 

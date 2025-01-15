@@ -173,8 +173,10 @@ public class PlayerController : MonoBehaviour
     private IEnumerator JustRespawnedCO() {
         yield return new WaitForSeconds(2f);
         canMove = true;
-        timer.UnPauseTimer();
-        timer.TimerTextWhite();
+        if (timer) {
+            timer.UnPauseTimer();
+            timer.TimerTextWhite();
+        }
     }
 
     #region Jump Methods

@@ -4,6 +4,7 @@ public class Respawner : MonoBehaviour
 {
     [SerializeField] private Transform respawnPoint1;
     [SerializeField] private Transform respawnPoint2;
+    public bool levelHasTimer = true;
 
     private PlayerController playerController;
     private GameObject player;
@@ -17,8 +18,10 @@ public class Respawner : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject == player) {
-            timer.PauseTimer();
-            timer.TimerTextRed();
+            if (levelHasTimer) {
+                timer.PauseTimer();
+                timer.TimerTextRed();
+            }
             playerController.JustRespawned();
             if (!playerController.hasTaco) {
                 player.transform.position = respawnPoint1.position;

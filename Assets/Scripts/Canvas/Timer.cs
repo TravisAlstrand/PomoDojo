@@ -82,8 +82,12 @@ public class Timer : MonoBehaviour
         player.DisableMovement();
         player.transform.localScale = Vector2.one;
         player.hasTaco = false;
-        taco.ResetTaco();
-        player.gameObject.transform.position = startRespawnPoint.position;
+        if (taco) {
+            taco.ResetTaco();
+        }
+        if (startRespawnPoint) {
+            player.gameObject.transform.position = startRespawnPoint.position;
+        }
         timer = startTime;
         tryAgainText.SetActive(true);
         StartCoroutine(WaitToRestart());
