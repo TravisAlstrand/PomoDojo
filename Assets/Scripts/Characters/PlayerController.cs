@@ -1,6 +1,6 @@
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private FrameInput frameInput;
     private Timer timer;
-    // private CinemachinePositionComposer camPosComposer;
+    private SceneController sceneController;
 
     private void Awake()
     {
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
         timer = FindFirstObjectByType<Timer>();
-        // camPosComposer = FindFirstObjectByType<CinemachinePositionComposer>();
+        sceneController = FindFirstObjectByType<SceneController>();
     }
 
     private void Update()
@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
             HandleAttack();
             DidStopJumpEarly();
             GravityDelay();
+            CheckForCheat();
             if (!isWallJumping)
             {
                 FlipSprite();
@@ -90,6 +91,23 @@ public class PlayerController : MonoBehaviour
     private void GatherInput()
     {
         frameInput = playerInput.FrameInput;
+    }
+
+    private void CheckForCheat() {
+        if (!frameInput.Cheated) return;
+        var currentScene = SceneManager.GetActiveScene().buildIndex;
+        if (currentScene == 2 || currentScene == 4 || currentScene == 6) {
+            int trainingNumber = 1;
+            if (currentScene == 4) {
+                trainingNumber = 2;
+            } else if (currentScene == 6) {
+                trainingNumber = 3;
+            }
+            DataPersister.Instance.SetTrainingBest(trainingNumber, 1f);
+            sceneController.LoadMainMenu();
+        } else {
+            return;
+        }
     }
 
     private void Move()

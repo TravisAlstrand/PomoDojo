@@ -11,6 +11,7 @@ public class PlayerInput : MonoBehaviour
     private InputAction jump;
     private InputAction attack;
     private InputAction submit;
+    private InputAction cheat;
 
     private void Awake()
     {
@@ -19,6 +20,7 @@ public class PlayerInput : MonoBehaviour
         jump = inputActions.Player.Jump;
         attack = inputActions.Player.Attack;
         submit = inputActions.UI.Submit;
+        cheat = inputActions.Player.Cheat;
     }
 
     private void OnEnable()
@@ -45,7 +47,8 @@ public class PlayerInput : MonoBehaviour
             Jump = jump.WasPressedThisFrame(),
             JumpRelease = jump.WasReleasedThisFrame(),
             Attack = attack.WasPressedThisFrame(),
-            SubmitRelease = submit.WasReleasedThisFrame()
+            SubmitRelease = submit.WasReleasedThisFrame(),
+            Cheated = cheat.WasPressedThisFrame()
         };
     }
 
@@ -69,4 +72,5 @@ public struct FrameInput
     public bool JumpRelease;
     public bool Attack;
     public bool SubmitRelease;
+    public bool Cheated;
 }
